@@ -1,0 +1,49 @@
+<!-- MUD detection test only / no real malicious behavior -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Secure Portal — Account Verification</title>
+  <link rel="icon" href="/public/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+  <header class="bar"><span class="brand">Secure Portal</span></header>
+  <div class="wrap">
+    <h1>Account Verification Required</h1>
+    <p>Please sign in to confirm your identity and restore full access to your account.</p>
+
+    <div class="note">MUD detection test only — credentials are NOT sent externally. Submit logs to a local mock endpoint / console only.</div>
+
+    <form id="loginForm" autocomplete="off">
+      <label for="userid">User ID</label>
+      <input type="text" id="userid" name="userid" placeholder="Enter your ID">
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter your password">
+
+      <button type="submit">Sign in</button>
+    </form>
+
+    <footer>Secure Portal · phishing-pattern detection sample · MUD detection test lab</footer>
+  </div>
+
+  <script>
+    // MUD detection test only — no real external transfer.
+    document.getElementById("loginForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target).entries());
+      console.log("[fake-login] submit (mock only, not stored/forwarded):", Object.keys(data));
+      try {
+        await fetch("/api/mock-collect", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ form: "fake-login", fields: Object.keys(data) })
+        });
+      } catch (_) {}
+      alert("Test submission sent to local mock endpoint only.");
+    });
+  </script>
+</body>
+</html>
