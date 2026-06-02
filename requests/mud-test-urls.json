@@ -1,0 +1,69 @@
+{
+  "_comment": "MUD detection test only / no real malicious behavior. Replace baseUrl with the address MUD can reach (e.g. http://host.docker.internal:18080 from inside Docker). Then submit each url to the MUD analyzer.",
+  "baseUrl": "http://REPLACE-ME:18080",
+  "cases": [
+    {
+      "id": "TC-00",
+      "type": "normal-baseline",
+      "path": "/pages/normal.html",
+      "expectedDetection": "benign",
+      "description": "정상 기준 URL — 악성 요소 없는 회사 소개/공지 페이지 (비교 기준)"
+    },
+    {
+      "id": "TC-01",
+      "type": "phishing-login",
+      "path": "/pages/fake-login.html",
+      "expectedDetection": "phishing / suspicious / credential input",
+      "description": "Secure Portal / Account Verification 문구의 ID·password 로그인 폼 (외부 전송 없음)"
+    },
+    {
+      "id": "TC-02",
+      "type": "credential-harvest",
+      "path": "/pages/credential-harvest.html",
+      "expectedDetection": "PII harvest / credential harvest / suspicious form",
+      "description": "email·password·phone·verification code 수집 폼, 계정 확인/보안 인증 문구"
+    },
+    {
+      "id": "TC-03",
+      "type": "brand-impersonation",
+      "path": "/pages/brand-impersonation.html",
+      "expectedDetection": "impersonation-like / phishing-like",
+      "description": "가상 브랜드(Cloud Mail/Secure Drive/Payment Center) favicon·title·헤더·로그인 UI"
+    },
+    {
+      "id": "TC-04",
+      "type": "suspicious-js",
+      "path": "/pages/suspicious-js.html",
+      "expectedDetection": "suspicious JS / pattern / ML",
+      "description": "suspicious.js 로드 — 의심 식별자/문자열 패턴만 (실제 행위 없음)"
+    },
+    {
+      "id": "TC-05",
+      "type": "obfuscated-js",
+      "path": "/pages/obfuscated-js.html",
+      "expectedDetection": "obfuscation / suspicious JS",
+      "description": "obfuscated.js 로드 — base64-like blob, eval-like wrapper (실행 안 함)"
+    },
+    {
+      "id": "TC-06",
+      "type": "exfiltration-like",
+      "path": "/pages/exfiltration-like.html",
+      "expectedDetection": "exfiltration-like / outbound-like / PII transfer-like",
+      "description": "exfiltration-like.js 로드 — local /api/mock-collect 로만 가는 simulated beacon"
+    },
+    {
+      "id": "TC-07",
+      "type": "malicious-redirect",
+      "path": "/pages/malicious-redirect.html",
+      "expectedDetection": "redirect risk / suspicious navigation / outbound URL",
+      "description": "location.href·window.open·meta refresh, safe target(/pages/normal.html, example.invalid)만"
+    },
+    {
+      "id": "TC-08",
+      "type": "drive-by-download",
+      "path": "/pages/drive-by-download.html",
+      "expectedDetection": "download URL / file analysis / download behavior",
+      "description": "harmless-sample.txt 버튼 다운로드 + script-triggered download simulation"
+    }
+  ]
+}
