@@ -1,0 +1,74 @@
+<!-- MUD detection test only / no real malicious behavior -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MUD v6.2 Detection Test Lab</title>
+  <link rel="icon" href="/public/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+  <header class="bar"><span class="brand">MUD v6.2 Detection Test Lab</span></header>
+  <div class="wrap">
+    <h1>Malicious-URL Detection Test Pages</h1>
+    <p>Each page below contains <strong>inert / simulated</strong> triggers for one malicious-URL category.
+       Submit them to the MUD analyzer and compare the verdict against the expected detection.</p>
+
+    <div class="note">
+      MUD detection test only — no real malicious behavior. No real malware, mining, PII theft,
+      external exfiltration, or C2. All inputs go to a local mock endpoint or the console only.
+    </div>
+
+    <ul class="cases">
+      <li class="card">
+        <h3><a href="/pages/normal.html">TC-00 · normal.html</a></h3>
+        <div>Normal company info/notice page with no malicious elements. Baseline for comparison.</div>
+        <span class="expect">Expected: benign</span>
+      </li>
+      <li class="card">
+        <h3><a href="/pages/fake-login.html">TC-01 · fake-login.html</a></h3>
+        <div>Generic "Secure Portal / Account Verification" login form with ID + password fields.</div>
+        <span class="expect">Expected: phishing / credential input</span>
+      </li>
+      <li class="card">
+        <h3><a href="/pages/credential-harvest.html">TC-02 · credential-harvest.html</a></h3>
+        <div>Form collecting email, password, phone, and verification code ("account/security re-verification").</div>
+        <span class="expect">Expected: PII harvest / credential harvest</span>
+      </li>
+      <li class="card">
+        <h3><a href="/pages/brand-impersonation.html">TC-03 · brand-impersonation.html</a></h3>
+        <div>Fictional brand ("Cloud Mail / Secure Drive / Payment Center") with favicon, title, header, login UI.</div>
+        <span class="expect">Expected: impersonation-like / phishing-like</span>
+      </li>
+      <li class="card">
+        <h3><a href="/pages/suspicious-js.html">TC-04 · suspicious-js.html</a></h3>
+        <div>Loads suspicious.js with flagged identifiers/patterns (no real behavior).</div>
+        <span class="expect">Expected: suspicious JS / pattern / ML</span>
+      </li>
+      <li class="card">
+        <h3><a href="/pages/obfuscated-js.html">TC-05 · obfuscated-js.html</a></h3>
+        <div>Loads obfuscated.js (base64-like blobs, eval-like wrapper — inert, nothing executed).</div>
+        <span class="expect">Expected: obfuscation / suspicious JS</span>
+      </li>
+      <li class="card">
+        <h3><a href="/pages/exfiltration-like.html">TC-06 · exfiltration-like.html</a></h3>
+        <div>Loads exfiltration-like.js — simulated beacon to the local mock endpoint only.</div>
+        <span class="expect">Expected: exfiltration-like / outbound-like</span>
+      </li>
+      <li class="card">
+        <h3><a href="/pages/malicious-redirect.html">TC-07 · malicious-redirect.html</a></h3>
+        <div>Auto + click redirects using location.href / window.open / meta refresh to safe targets only.</div>
+        <span class="expect">Expected: redirect risk / suspicious navigation</span>
+      </li>
+      <li class="card">
+        <h3><a href="/pages/drive-by-download.html">TC-08 · drive-by-download.html</a></h3>
+        <div>Button download + script-triggered download simulation for harmless-sample.txt.</div>
+        <span class="expect">Expected: download URL / download behavior</span>
+      </li>
+    </ul>
+
+    <footer>MUD detection test lab · inert test bed · not for production use</footer>
+  </div>
+</body>
+</html>
