@@ -1,0 +1,28 @@
+<!-- MUD detection test only / no real malicious behavior -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Suspicious JS Sample</title>
+  <link rel="icon" href="/public/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+  <header class="bar"><span class="brand">Suspicious JS Sample</span></header>
+  <div class="wrap">
+    <h1>Suspicious JavaScript Detection Sample</h1>
+    <p>This page loads <code>/public/js/suspicious.js</code>, which contains suspicious-looking
+       identifiers and string patterns (e.g. <code>collectCredentialsMock</code>,
+       <code>simulatedBeacon</code>, <code>fakeKeyLoggerDetectorString</code>,
+       <code>suspiciousEvalPattern</code>). All of them are inert — no real behavior.</p>
+
+    <div class="note">MUD detection test only — the script performs no key logging, no network requests, and accesses no real data.</div>
+
+    <p>Open the browser console to see the inert log output.</p>
+    <footer>Suspicious-JS detection sample · MUD detection test lab</footer>
+  </div>
+
+  <script src="/public/js/suspicious.js"></script>
+</body>
+</html>
