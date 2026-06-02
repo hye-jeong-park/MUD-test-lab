@@ -1,0 +1,17 @@
+{
+  "name": "mud-test-lab",
+  "version": "1.0.0",
+  "description": "Safe inert test pages for validating MUD v6.2 malicious-URL detection (no real malicious behavior).",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "license": "MIT",
+  "private": true
+}
