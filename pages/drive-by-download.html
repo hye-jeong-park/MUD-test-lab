@@ -1,0 +1,45 @@
+<!-- MUD detection test only / no real malicious behavior -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Drive-by Download Sample</title>
+  <link rel="icon" href="/public/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+  <header class="bar"><span class="brand">Drive-by Download Sample</span></header>
+  <div class="wrap">
+    <h1>Drive-by Download Detection Sample</h1>
+    <p>This page exposes a download URL and a script-triggered download simulation.
+       The downloaded file is <code>/public/files/harmless-sample.txt</code> — a plain,
+       inert text file with no executable content.</p>
+
+    <div class="note">MUD detection test only — no real malicious file is served. The sample is harmless plain text.</div>
+
+    <h2>1. Button-click download</h2>
+    <p><a class="btn" href="/public/files/harmless-sample.txt" download>Download harmless-sample.txt</a></p>
+
+    <h2>2. Script-triggered download simulation</h2>
+    <p>This simulates an auto-initiated download by programmatically clicking a hidden
+       download link (only when you press the button, so the page does not download on load).</p>
+    <button type="button" id="autoDownloadBtn">Simulate script-triggered download</button>
+
+    <footer>Download-behavior detection sample · MUD detection test lab</footer>
+  </div>
+
+  <script>
+    // MUD detection test only — downloads a harmless plain-text file only.
+    document.getElementById("autoDownloadBtn").addEventListener("click", function () {
+      console.log("[drive-by-download] script-triggered download of harmless-sample.txt");
+      const a = document.createElement("a");
+      a.href = "/public/files/harmless-sample.txt";
+      a.download = "harmless-sample.txt";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
+  </script>
+</body>
+</html>
