@@ -1,0 +1,51 @@
+<!-- MUD detection test only / no real malicious behavior -->
+<!-- Fictional brands only ("Cloud Mail" / "Secure Drive" / "Payment Center"). No real trademark or logo is used. -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cloud Mail — Sign in to your account</title>
+  <link rel="icon" href="/public/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+  <header class="bar"><span class="brand">☁ Cloud Mail</span></header>
+  <div class="wrap">
+    <h1>Sign in to Cloud Mail</h1>
+    <p>Access <strong>Cloud Mail</strong>, <strong>Secure Drive</strong>, and <strong>Payment Center</strong> with one account.
+       (All brands here are fictional and used only for impersonation-detection testing.)</p>
+
+    <div class="note">MUD detection test only — fictional brand, no real logo/trademark, no external transfer.</div>
+
+    <form id="brandForm" autocomplete="off">
+      <label for="email">Cloud Mail address</label>
+      <input type="email" id="email" name="email" placeholder="you@cloudmail.example">
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Password">
+
+      <button type="submit">Sign in</button>
+    </form>
+
+    <footer>Fictional "Cloud Mail" · brand-impersonation detection sample · MUD detection test lab</footer>
+  </div>
+
+  <script>
+    // MUD detection test only — no real external transfer.
+    document.getElementById("brandForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target).entries());
+      console.log("[brand-impersonation] submit (mock only):", Object.keys(data));
+      try {
+        await fetch("/api/mock-collect", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ form: "brand-impersonation", fields: Object.keys(data) })
+        });
+      } catch (_) {}
+      alert("Test submission sent to local mock endpoint only.");
+    });
+  </script>
+</body>
+</html>
