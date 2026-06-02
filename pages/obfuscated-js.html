@@ -1,0 +1,27 @@
+<!-- MUD detection test only / no real malicious behavior -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Obfuscated JS Sample</title>
+  <link rel="icon" href="/public/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+  <header class="bar"><span class="brand">Obfuscated JS Sample</span></header>
+  <div class="wrap">
+    <h1>Obfuscated JavaScript Detection Sample</h1>
+    <p>This page loads <code>/public/js/obfuscated.js</code>, which mimics the shape of
+       packed/obfuscated code: base64-like blobs, an eval-like wrapper, string-concat
+       construction, and mangled variable names.</p>
+
+    <div class="note">MUD detection test only — the eval-like wrapper is a no-op. Nothing is decoded-and-executed; no dynamic code runs.</div>
+
+    <p>Open the browser console to see the inert log output.</p>
+    <footer>Obfuscation detection sample · MUD detection test lab</footer>
+  </div>
+
+  <script src="/public/js/obfuscated.js"></script>
+</body>
+</html>
