@@ -1,0 +1,36 @@
+<!-- MUD detection test only / no real malicious behavior -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Redirect Sample</title>
+  <link rel="icon" href="/public/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/public/css/style.css">
+  <!-- meta refresh redirect example (commented so testers are not bounced; string present for static analysis) -->
+  <!-- <meta http-equiv="refresh" content="3; url=/pages/normal.html"> -->
+</head>
+<body>
+  <header class="bar"><span class="brand">Redirect Sample</span></header>
+  <div class="wrap">
+    <h1>Malicious-Redirect Detection Sample</h1>
+    <p>This page loads <code>/public/js/redirect.js</code>, which contains the usual redirect
+       primitives: <code>location.href</code>, <code>window.open</code>, and a commented
+       <code>meta refresh</code>. It includes both an auto-redirect (simulated, not auto-fired)
+       and click-triggered redirects.</p>
+
+    <div class="note">
+      MUD detection test only — redirect targets are restricted to a local safe path
+      (<code>/pages/normal.html</code>) or the harmless non-routable domain
+      <code>https://example.invalid/</code>. No real malicious site is reached.
+    </div>
+
+    <button type="button" id="redirectLocalBtn">Redirect to local safe page</button>
+    <button type="button" id="redirectOutboundBtn">Open harmless outbound (example.invalid)</button>
+
+    <footer>Redirect detection sample · MUD detection test lab</footer>
+  </div>
+
+  <script src="/public/js/redirect.js"></script>
+</body>
+</html>
