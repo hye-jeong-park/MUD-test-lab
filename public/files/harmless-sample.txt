@@ -1,0 +1,7 @@
+MUD detection test only — harmless sample file.
+
+This file contains no executable content and no real malicious payload.
+It exists solely so that download-behavior detection has an inert target
+to observe (download URL, file analysis, download behavior).
+
+If you are reading this, the download path works as intended.
