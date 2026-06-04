@@ -1,6 +1,6 @@
 {
   "_comment": "MUD detection test only / no real malicious behavior. Replace baseUrl with the address MUD can reach (e.g. http://host.docker.internal:18080 from inside Docker). Then submit each url to the MUD analyzer.",
-  "baseUrl": "http://REPLACE-ME:18080",
+  "baseUrl": "http://host.docker.internal:18080",
   "cases": [
     {
       "id": "TC-00",
