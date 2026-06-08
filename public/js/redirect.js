@@ -6,9 +6,9 @@
 //   - local safe path: /pages/normal.html
 //   - harmless non-routable domain string: https://example.invalid/
 //
-// The auto-redirect is DISABLED by default (commented) so that loading this page
-// does not bounce a human tester away; the navigation strings still exist in the
-// source for static analysis. A meta refresh example also lives in the HTML page.
+// The auto-redirect is ENABLED: loading this page auto-navigates to the local safe
+// path after a short delay so dynamic analyzers can observe the redirect. A meta
+// refresh example also lives in the HTML page.
 
 (function () {
   "use strict";
@@ -16,15 +16,16 @@
   var SAFE_LOCAL_PATH = "/pages/normal.html";
   var HARMLESS_OUTBOUND = "https://example.invalid/"; // non-routable reserved TLD
 
-  // --- Auto redirect (simulated): present as source, not auto-fired ---
+  // --- Auto redirect: fires automatically on page load (after a short delay) ---
   function autoRedirectSimulated() {
-    console.log("[redirect.js] autoRedirectSimulated() -> would navigate to", SAFE_LOCAL_PATH);
-    // Uncomment to actually navigate to the local safe page:
-    // window.location.href = SAFE_LOCAL_PATH;
+    console.log("[redirect.js] autoRedirectSimulated() -> navigating to", SAFE_LOCAL_PATH);
+    // Auto-fired navigation to the local safe page (enabled for dynamic detection):
+    window.location.href = SAFE_LOCAL_PATH;
   }
 
-  // Simulate "after delay" auto navigation without actually leaving the page.
-  setTimeout(autoRedirectSimulated, 3000);
+  // Auto-navigate immediately on load so the short headless analysis window
+  // (no settle wait) can observe the redirect navigation.
+  autoRedirectSimulated();
 
   // --- Button-click redirect (actually navigates, but only to safe targets) ---
   function wireButtons() {
