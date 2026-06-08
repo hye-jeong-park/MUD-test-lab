@@ -22,8 +22,8 @@
     <p><a class="btn" href="/public/files/harmless-sample.txt" download>Download harmless-sample.txt</a></p>
 
     <h2>2. Script-triggered download simulation</h2>
-    <p>This simulates an auto-initiated download by programmatically clicking a hidden
-       download link (only when you press the button, so the page does not download on load).</p>
+    <p>This auto-initiates a download on page load by programmatically clicking a hidden
+       download link. The button below triggers the same download manually.</p>
     <button type="button" id="autoDownloadBtn">Simulate script-triggered download</button>
 
     <footer>Download-behavior detection sample · MUD detection test lab</footer>
@@ -31,7 +31,7 @@
 
   <script>
     // MUD detection test only — downloads a harmless plain-text file only.
-    document.getElementById("autoDownloadBtn").addEventListener("click", function () {
+    function triggerDownload() {
       console.log("[drive-by-download] script-triggered download of harmless-sample.txt");
       const a = document.createElement("a");
       a.href = "/public/files/harmless-sample.txt";
@@ -39,7 +39,14 @@
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-    });
+    }
+
+    document.getElementById("autoDownloadBtn").addEventListener("click", triggerDownload);
+
+    // Auto-fire the download immediately (this <script> is at the end of <body>,
+    // so the DOM exists). No setTimeout/load delay — the headless analyzer has no
+    // settle wait, so a delayed download would fire after the snapshot and be missed.
+    triggerDownload();
   </script>
 </body>
 </html>
