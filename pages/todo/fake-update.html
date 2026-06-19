@@ -1,0 +1,55 @@
+<!-- MUD detection test only / no real malicious behavior -->
+<!-- Fictional product ("SwiftView Player"). No real brand/logo. Download is the harmless local sample. -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Critical Update Required — SwiftView Player</title>
+  <link rel="icon" href="/public/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+  <header class="bar"><span class="brand">⚠ SwiftView Player</span></header>
+  <div class="wrap">
+    <h1>Your player is out of date</h1>
+    <p>Your version of <strong>SwiftView Player</strong> is outdated and may stop working.
+       To keep watching, you must <strong>install the latest update now</strong>. This is a
+       fake-update social-engineering pattern (urgency + forced download).</p>
+
+    <div class="note">MUD detection test only — fictional product, no real update, no real malware. The "update" is the harmless local <code>harmless-sample.txt</code>; nothing executable is served.</div>
+
+    <h2>Recommended action</h2>
+    <p><a class="btn" href="/public/files/harmless-sample.txt" download="SwiftViewPlayer-Update.txt">Update now (required)</a></p>
+    <p>Update will continue automatically in <span id="count">5</span> seconds…</p>
+
+    <footer>Fake-update / social-engineering detection sample · MUD detection test lab</footer>
+  </div>
+
+  <script>
+    // MUD detection test only — auto-fires a harmless local download to mimic a
+    // forced "update" drive-by. No real update binary exists.
+    function triggerUpdateDownload() {
+      console.log("[fake-update] auto 'update' download of harmless-sample.txt (inert)");
+      const a = document.createElement("a");
+      a.href = "/public/files/harmless-sample.txt";
+      a.download = "SwiftViewPlayer-Update.txt";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // Visible countdown (cosmetic) — the download auto-fires immediately so the
+    // headless analyzer (no settle wait) can observe it.
+    let n = 5;
+    const el = document.getElementById("count");
+    const t = setInterval(function () {
+      n -= 1;
+      if (el) el.textContent = String(Math.max(n, 0));
+      if (n <= 0) clearInterval(t);
+    }, 1000);
+
+    triggerUpdateDownload();
+  </script>
+</body>
+</html>
