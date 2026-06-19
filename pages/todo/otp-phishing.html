@@ -1,0 +1,62 @@
+<!-- MUD detection test only / no real malicious behavior -->
+<!-- OTP / 2FA interception phishing. No real OTP, no real account; form posts field names to local mock only. -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Two-Step Verification — Enter your code</title>
+  <link rel="icon" href="/public/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+  <header class="bar"><span class="brand">🔐 Secure Sign-in</span></header>
+  <div class="wrap">
+    <h1>Two-step verification</h1>
+    <p>We sent a 6-digit code to your phone. Enter it below to finish signing in. This mimics a
+       real-time <strong>OTP / 2FA interception</strong> phishing page that relays the victim's
+       one-time code to an attacker.</p>
+
+    <div class="note">MUD detection test only — no real account, no real OTP is sent or relayed, nothing is intercepted. The form posts only field names to the LOCAL mock endpoint; nothing is stored or forwarded.</div>
+
+    <form id="otpForm" autocomplete="off">
+      <label for="otp">6-digit verification code</label>
+      <input type="text" id="otp" name="otp" inputmode="numeric" maxlength="6" placeholder="123456">
+
+      <label for="backup">Backup code (if you didn't receive the SMS)</label>
+      <input type="text" id="backup" name="backup" placeholder="xxxx-xxxx">
+
+      <button type="submit">Verify</button>
+    </form>
+
+    <p><a href="#" id="resend">Resend code</a> · Code expires in <span id="exp">60</span>s</p>
+
+    <footer>OTP / 2FA-interception phishing detection sample · MUD detection test lab</footer>
+  </div>
+
+  <script>
+    // MUD detection test only — no OTP is generated, relayed, or intercepted.
+    var s = 60, el = document.getElementById("exp");
+    var iv = setInterval(function () { s -= 1; if (el) el.textContent = String(Math.max(s, 0)); if (s <= 0) clearInterval(iv); }, 1000);
+
+    document.getElementById("resend").addEventListener("click", function (e) {
+      e.preventDefault();
+      console.log("[otp-phishing] resend clicked (no real code sent)");
+    });
+
+    document.getElementById("otpForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      var data = Object.fromEntries(new FormData(e.target).entries());
+      console.log("[otp-phishing] submit (mock only, not relayed):", Object.keys(data));
+      try {
+        await fetch("/api/mock-collect", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ form: "otp-phishing", fields: Object.keys(data) })
+        });
+      } catch (_) {}
+      alert("MUD detection test only — code was NOT relayed. Sent to local mock endpoint only.");
+    });
+  </script>
+</body>
+</html>
