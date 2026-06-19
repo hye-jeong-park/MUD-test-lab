@@ -1,0 +1,65 @@
+<!-- MUD detection test only / no real malicious behavior -->
+<!-- Cryptojacking-SHAPED sample. No real mining, no WebAssembly miner, no pool connection, no CPU abuse. -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Free Streaming — Watch Now</title>
+  <link rel="icon" href="/public/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+  <header class="bar"><span class="brand">FreeStream HD</span></header>
+  <div class="wrap">
+    <h1>Free Streaming Portal</h1>
+    <p>This page is structured to look like an in-browser <strong>cryptojacking</strong> page:
+       it references miner-style identifiers (<code>CoinMinerLite</code>, <code>startMining</code>,
+       <code>hashesPerSecond</code>, <code>stratumPoolUrl</code>) and a fake worker loop.</p>
+
+    <div class="note">
+      MUD detection test only — NO real mining occurs. There is no WebAssembly miner, no Web Worker,
+      no mining-pool/stratum connection, and no CPU-intensive loop. All identifiers are inert strings,
+      and the "hash rate" is a fixed fake number.
+    </div>
+
+    <p>Simulated hash rate: <strong id="rate">0</strong> H/s (fake constant)</p>
+    <footer>Cryptojacking-shaped detection sample · MUD detection test lab</footer>
+  </div>
+
+  <script>
+    // MUD detection test only — miner-SHAPED, fully inert. No real hashing.
+    (function () {
+      "use strict";
+
+      // Miner-style constants (decoy strings only — never used to connect anywhere)
+      var stratumPoolUrl = "stratum+tcp://pool.example.invalid:3333"; // non-routable, never dialed
+      var minerSiteKey = "FAKE-SITEKEY-MUD-TEST-0000";
+      var threads = 4;
+
+      function CoinMinerLite(cfg) {
+        // A real miner would spin up Web Workers + WASM here. We do nothing.
+        this.cfg = cfg || {};
+        this.running = false;
+      }
+      CoinMinerLite.prototype.startMining = function () {
+        // NO loop, NO worker, NO WASM. Just sets a flag and logs.
+        this.running = true;
+        console.log("[cryptojacking] startMining() called — INERT, no hashing, no CPU use");
+        return 0; // hashesPerSecond (fake)
+      };
+      CoinMinerLite.prototype.hashesPerSecond = function () { return 0; };
+      CoinMinerLite.prototype.stop = function () { this.running = false; };
+
+      var miner = new CoinMinerLite({ pool: stratumPoolUrl, key: minerSiteKey, threads: threads });
+      miner.startMining();
+
+      var rateEl = document.getElementById("rate");
+      if (rateEl) rateEl.textContent = "0"; // fixed fake value, no real measurement
+
+      window.__mudCryptojackTest = { stratumPoolUrl: stratumPoolUrl, minerSiteKey: minerSiteKey, miner: miner };
+      console.log("[cryptojacking] loaded (inert cryptojacking-shaped sample, no real mining)");
+    })();
+  </script>
+</body>
+</html>
