@@ -1,0 +1,53 @@
+<!-- MUD detection test only / no real malicious behavior -->
+<!-- "ClickFix" fake-CAPTCHA social engineering. No clipboard write of a real command; nothing is executed. -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Verify you are human</title>
+  <link rel="icon" href="/public/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+  <header class="bar"><span class="brand">✔ Human Verification</span></header>
+  <div class="wrap">
+    <h1>Verify you are human</h1>
+    <p>This page mimics the <strong>"ClickFix"</strong> social-engineering pattern: a fake CAPTCHA
+       that instructs the victim to open the Run dialog and paste-and-run a command. It is a
+       known malware-delivery lure.</p>
+
+    <div class="note">
+      MUD detection test only — INERT. No real command is written to the clipboard, the
+      Clipboard API is NOT called, and nothing is executed. The "command" below is a harmless
+      labelled placeholder string shown for detection only.
+    </div>
+
+    <h2>To continue, complete the verification steps:</h2>
+    <ol>
+      <li>Press <kbd>Windows</kbd> + <kbd>R</kbd></li>
+      <li>Press <kbd>Ctrl</kbd> + <kbd>V</kbd></li>
+      <li>Press <kbd>Enter</kbd></li>
+    </ol>
+
+    <p>Verification token (placeholder, not a real command):</p>
+    <pre><code id="payload">echo "MUD-TEST-CLICKFIX placeholder — not a real command, nothing runs"</code></pre>
+
+    <button type="button" id="verifyBtn">✔ I'm not a robot</button>
+
+    <footer>ClickFix fake-CAPTCHA detection sample · MUD detection test lab</footer>
+  </div>
+
+  <script>
+    // MUD detection test only — demonstrates the ClickFix lure UX WITHOUT any real
+    // clipboard write or command. navigator.clipboard.writeText is intentionally NOT called.
+    document.getElementById("verifyBtn").addEventListener("click", function () {
+      console.log("[clickfix-captcha] verify clicked — INERT, no clipboard write, nothing executed");
+      // A real ClickFix attack would do: navigator.clipboard.writeText("<malicious powershell>")
+      // We deliberately do NOT. This is the decoy demonstration only.
+      alert("MUD detection test only — no command was copied and nothing was run.");
+    });
+    console.log("[clickfix-captcha] loaded (inert ClickFix-shaped sample)");
+  </script>
+</body>
+</html>
