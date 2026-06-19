@@ -1,0 +1,73 @@
+<!-- MUD detection test only / no real malicious behavior -->
+<!-- Data-URI / Blob download SHAPED sample. Builds a harmless text Blob client-side; no static file, no executable. -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Document Ready — Download</title>
+  <link rel="icon" href="/public/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+  <header class="bar"><span class="brand">DocVault</span></header>
+  <div class="wrap">
+    <h1>Data-URI / Blob Download Detection Sample</h1>
+    <p>This page triggers downloads built entirely <strong>in the browser</strong> — from a
+       <code>data:</code> URI and from a generated <code>Blob</code> / <code>URL.createObjectURL</code> —
+       the way fileless droppers serve a payload without any server-hosted file.</p>
+
+    <div class="note">
+      MUD detection test only — the generated files are harmless plain text. No executable, script,
+      HTML, or archive content is produced; nothing is hosted on the server; nothing is transmitted.
+    </div>
+
+    <h2>1. data: URI download</h2>
+    <button type="button" id="dataUriBtn">Download via data: URI</button>
+
+    <h2>2. Blob / object-URL download</h2>
+    <button type="button" id="blobBtn">Download via Blob URL</button>
+
+    <p>A harmless Blob download also auto-fires on load (for dynamic detection).</p>
+
+    <footer>Data-URI / Blob download detection sample · MUD detection test lab</footer>
+  </div>
+
+  <script>
+    // MUD detection test only — client-side download generation. Harmless text only.
+    (function () {
+      "use strict";
+      var TEXT = "MUD detection test only — inert plain-text payload (no executable content).";
+
+      function downloadDataUri() {
+        var uri = "data:text/plain;charset=utf-8," + encodeURIComponent(TEXT);
+        var a = document.createElement("a");
+        a.href = uri;
+        a.download = "mud-test-datauri.txt";
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        console.log("[data-uri-download] data: URI download fired (harmless text)");
+      }
+
+      function downloadBlob() {
+        var blob = new Blob([TEXT], { type: "text/plain" });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = "mud-test-blob.txt";
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 0);
+        console.log("[data-uri-download] Blob/object-URL download fired (harmless text)");
+      }
+
+      document.getElementById("dataUriBtn").addEventListener("click", downloadDataUri);
+      document.getElementById("blobBtn").addEventListener("click", downloadBlob);
+
+      // Auto-fire a Blob download immediately so the headless analyzer can observe it.
+      downloadBlob();
+
+      window.__mudDataUriTest = { downloadDataUri: downloadDataUri, downloadBlob: downloadBlob };
+      console.log("[data-uri-download] loaded (inert client-side download sample)");
+    })();
+  </script>
+</body>
+</html>
