@@ -1,0 +1,54 @@
+<!-- MUD detection test only / no real malicious behavior -->
+<!-- Hidden-iframe / malvertising-SHAPED sample. All iframe/script sources are local safe paths only. -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Daily News — Top Stories</title>
+  <link rel="icon" href="/public/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+  <header class="bar"><span class="brand">Daily News</span></header>
+  <div class="wrap">
+    <h1>Top Stories</h1>
+    <p>An ordinary-looking content page that hides off-screen / zero-size iframes the way
+       <strong>malvertising and hidden-iframe injection</strong> pages do. The visible content is
+       benign; the hidden frames are the detection target.</p>
+
+    <div class="note">
+      MUD detection test only — every hidden iframe points to a LOCAL safe page
+      (<code>/pages/normal.html</code>) or the non-routable <code>example.invalid</code> domain.
+      No real ad network, exploit kit, or third-party host is contacted.
+    </div>
+
+    <h2>Article: Spring community meetup recap</h2>
+    <p>Lorem ipsum content for the visible, benign portion of the page. Nothing here is harmful.</p>
+
+    <footer>Hidden-iframe / malvertising-shaped detection sample · MUD detection test lab</footer>
+  </div>
+
+  <!-- Hidden iframe: zero size, off-screen (classic injection shape). Local safe target only. -->
+  <iframe src="/pages/normal.html" width="0" height="0" style="position:absolute;left:-9999px;top:-9999px;border:0;" title="hidden-frame-1" aria-hidden="true"></iframe>
+
+  <!-- display:none iframe pointing at a non-routable domain (never loads) -->
+  <iframe src="https://ads.example.invalid/track" style="display:none" title="hidden-frame-2" aria-hidden="true"></iframe>
+
+  <script>
+    // MUD detection test only — dynamically inject another hidden iframe (the way
+    // injected malvertising does), but to a LOCAL safe path. Fully inert.
+    (function () {
+      "use strict";
+      var f = document.createElement("iframe");
+      f.src = "/pages/normal.html";  // local safe target only
+      f.width = "1"; f.height = "1";
+      f.style.cssText = "position:absolute;left:-9999px;visibility:hidden;border:0;";
+      f.setAttribute("aria-hidden", "true");
+      f.title = "hidden-frame-3-dynamic";
+      document.body.appendChild(f);
+      console.log("[hidden-iframe] injected hidden iframe -> /pages/normal.html (local safe, inert)");
+    })();
+  </script>
+</body>
+</html>
