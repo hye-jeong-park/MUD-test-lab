@@ -1,0 +1,66 @@
+<!-- MUD detection test only / no real malicious behavior -->
+<!-- Prize / lottery advance-fee (reward) scam. No payment, no PII transfer; form posts to local mock only. -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>🎉 Congratulations! You've won a $1,000 Gift Card</title>
+  <link rel="icon" href="/public/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+  <header class="bar"><span class="brand">🎁 Reward Center</span></header>
+  <div class="wrap">
+    <h1>🎉 You are today's lucky winner!</h1>
+    <p>You have been selected to receive a <strong>$1,000 Gift Card</strong>. To claim your prize,
+       confirm your details and pay a small <strong>$2.99 processing fee</strong> before the timer
+       runs out. This is a classic prize / advance-fee scam pattern.</p>
+
+    <div class="note">MUD detection test only — no real prize, no real payment, no PII collected. The form posts field names to the LOCAL mock endpoint only; nothing is stored or charged.</div>
+
+    <p>Offer expires in: <strong id="timer">04:59</strong></p>
+
+    <form id="prizeForm" autocomplete="off">
+      <label for="fullname">Full name (to print on gift card)</label>
+      <input type="text" id="fullname" name="fullname" placeholder="Your name">
+
+      <label for="address">Shipping address</label>
+      <input type="text" id="address" name="address" placeholder="Address">
+
+      <label for="card">Card number (for $2.99 processing fee)</label>
+      <input type="text" id="card" name="card" inputmode="numeric" placeholder="•••• •••• •••• ••••">
+
+      <button type="submit">Claim my $1,000 gift card</button>
+    </form>
+
+    <footer>Prize / advance-fee scam detection sample · MUD detection test lab</footer>
+  </div>
+
+  <script>
+    // MUD detection test only — no charge, no storage, no external transfer.
+    var t = 299; // 4:59 cosmetic countdown
+    var el = document.getElementById("timer");
+    var iv = setInterval(function () {
+      t -= 1;
+      if (t < 0) { clearInterval(iv); return; }
+      var m = Math.floor(t / 60), s = t % 60;
+      if (el) el.textContent = m + ":" + (s < 10 ? "0" + s : s);
+    }, 1000);
+
+    document.getElementById("prizeForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      var data = Object.fromEntries(new FormData(e.target).entries());
+      console.log("[gift-card-scam] submit (mock only, not stored/charged):", Object.keys(data));
+      try {
+        await fetch("/api/mock-collect", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ form: "gift-card-scam", fields: Object.keys(data) })
+        });
+      } catch (_) {}
+      alert("MUD detection test only — no prize, no charge. Sent to local mock endpoint only.");
+    });
+  </script>
+</body>
+</html>
