@@ -1,0 +1,52 @@
+<!-- MUD detection test only / no real malicious behavior -->
+<!-- Notification-permission abuse SHAPED sample. Notification.requestPermission is NOT auto-called; no real subscription. -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Click Allow to continue</title>
+  <link rel="icon" href="/public/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+  <header class="bar"><span class="brand">VideoPlay</span></header>
+  <div class="wrap">
+    <h1>Click "Allow" to confirm you are not a robot</h1>
+    <p>This page mimics the <strong>browser-notification permission abuse</strong> lure: it tells the
+       user to click "Allow" on the notification prompt (falsely framed as a robot check) so the site
+       can later spam push ads / scam notifications.</p>
+
+    <div class="note">
+      MUD detection test only — INERT. <code>Notification.requestPermission()</code> is NOT called
+      automatically and no push subscription is created. The prompt only fires if you click the
+      button below, and even then nothing is subscribed or sent.
+    </div>
+
+    <div class="note" style="font-weight:bold">↑ ↑ ↑ Click "Allow" above to continue ↑ ↑ ↑ (social-engineering arrow lure — decoy text only)</div>
+
+    <button type="button" id="allowBtn">Allow to continue</button>
+
+    <footer>Notification-abuse detection sample · MUD detection test lab</footer>
+  </div>
+
+  <script>
+    // MUD detection test only — notification-abuse SHAPED. The permission prompt is
+    // gated behind an explicit click, and no push subscription / service worker is registered.
+    document.getElementById("allowBtn").addEventListener("click", function () {
+      console.log("[push-notification-scam] allow clicked — requesting permission (no subscription created)");
+      try {
+        if ("Notification" in window && typeof Notification.requestPermission === "function") {
+          // Only requests permission on explicit user click. No PushManager.subscribe(),
+          // no service worker, no notification is actually shown or sent.
+          Notification.requestPermission().then(function (state) {
+            console.log("[push-notification-scam] permission state:", state, "(nothing subscribed/sent)");
+          }).catch(function () {});
+        }
+      } catch (e) {}
+      alert("MUD detection test only — no push subscription was created and nothing was sent.");
+    });
+    console.log("[push-notification-scam] loaded (inert notification-abuse-shaped sample)");
+  </script>
+</body>
+</html>
