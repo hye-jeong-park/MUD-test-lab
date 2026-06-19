@@ -1,0 +1,62 @@
+<!-- MUD detection test only / no real malicious behavior -->
+<!-- Fake invoice / billing phishing. Fictional vendor. No payment; "view invoice" downloads the harmless sample. -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Invoice #INV-20260619-8842 — Payment overdue</title>
+  <link rel="icon" href="/public/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+  <header class="bar"><span class="brand">🧾 GlobalPay Billing</span></header>
+  <div class="wrap">
+    <h1>Your payment is overdue</h1>
+    <p>Our records show invoice <strong>#INV-20260619-8842</strong> for <strong>$842.00</strong> is
+       past due. To avoid suspension and late fees, review the attached invoice and confirm payment
+       now. This is a fake-invoice / billing-phishing pattern (fictional vendor "GlobalPay").</p>
+
+    <div class="note">MUD detection test only — fictional vendor, no real invoice, no real charge. "Download invoice" serves the harmless local <code>harmless-sample.txt</code>; the payment form posts field names to the LOCAL mock endpoint only.</div>
+
+    <table>
+      <tr><td>Invoice</td><td><code>#INV-20260619-8842</code></td></tr>
+      <tr><td>Amount due</td><td><strong>$842.00</strong></td></tr>
+      <tr><td>Due date</td><td>2026-06-12 (overdue)</td></tr>
+      <tr><td>Status</td><td>⚠ Suspension pending</td></tr>
+    </table>
+
+    <p><a class="btn" href="/public/files/harmless-sample.txt" download="Invoice-INV-20260619-8842.txt">Download invoice (PDF)</a></p>
+
+    <h2>Pay now to avoid suspension</h2>
+    <form id="payForm" autocomplete="off">
+      <label for="card">Card number</label>
+      <input type="text" id="card" name="card" inputmode="numeric" placeholder="•••• •••• •••• ••••">
+
+      <label for="cvv">CVV</label>
+      <input type="text" id="cvv" name="cvv" inputmode="numeric" placeholder="•••">
+
+      <button type="submit">Pay $842.00 now</button>
+    </form>
+
+    <footer>Fake-invoice / billing-phishing detection sample · MUD detection test lab</footer>
+  </div>
+
+  <script>
+    // MUD detection test only — no charge, no storage, no external transfer.
+    document.getElementById("payForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      var data = Object.fromEntries(new FormData(e.target).entries());
+      console.log("[fake-invoice] submit (mock only, not stored/charged):", Object.keys(data));
+      try {
+        await fetch("/api/mock-collect", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ form: "fake-invoice", fields: Object.keys(data) })
+        });
+      } catch (_) {}
+      alert("MUD detection test only — no charge. Sent to local mock endpoint only.");
+    });
+  </script>
+</body>
+</html>
