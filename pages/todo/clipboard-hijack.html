@@ -1,0 +1,61 @@
+<!-- MUD detection test only / no real malicious behavior -->
+<!-- Clipboard-hijack SHAPED sample. The Clipboard API is NOT called; no real address swap occurs. -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Donate · Support the Project</title>
+  <link rel="icon" href="/public/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+  <header class="bar"><span class="brand">OpenFund Donations</span></header>
+  <div class="wrap">
+    <h1>Support the project</h1>
+    <p>This page is structured to look like a <strong>clipboard hijacker</strong> (a "clipper"):
+       code that watches copy events and would swap a copied crypto wallet address for the
+       attacker's. The intent markers are present for detection; the malicious effect is removed.</p>
+
+    <div class="note">
+      MUD detection test only — INERT. <code>navigator.clipboard.writeText</code> and
+      <code>document.execCommand('copy')</code> are NEVER called. No copy listener overwrites
+      the clipboard. The wallet strings below are obviously-fake placeholders.
+    </div>
+
+    <h2>Donate (copy an address)</h2>
+    <p>Legitimate address: <code id="addr">FAKE-WALLET-LEGIT-0000000000000000</code></p>
+    <p>Attacker address (decoy, never written to clipboard): <code>FAKE-WALLET-ATTACKER-1111111111</code></p>
+
+    <button type="button" id="copyBtn">Copy donation address</button>
+
+    <footer>Clipboard-hijack-shaped detection sample · MUD detection test lab</footer>
+  </div>
+
+  <script>
+    // MUD detection test only — clipper-SHAPED, fully inert.
+    (function () {
+      "use strict";
+      var LEGIT = "FAKE-WALLET-LEGIT-0000000000000000";
+      var ATTACKER = "FAKE-WALLET-ATTACKER-1111111111"; // decoy only — never used
+
+      // A real clipper would register a 'copy' listener and call
+      // e.clipboardData.setData(...) / navigator.clipboard.writeText(ATTACKER).
+      // We do NOT register any clipboard-overwriting behavior.
+      function hijackClipboardSimulated() {
+        console.log("[clipboard-hijack] hijackClipboardSimulated() — INERT, clipboard NOT modified");
+        return { swappedFrom: LEGIT, swappedTo: ATTACKER, applied: false };
+      }
+
+      document.getElementById("copyBtn").addEventListener("click", function () {
+        // Intentionally does nothing to the clipboard.
+        console.log("[clipboard-hijack] copy clicked — no clipboard write performed");
+        alert("MUD detection test only — clipboard was NOT modified.");
+      });
+
+      window.__mudClipperTest = { LEGIT: LEGIT, ATTACKER: ATTACKER, hijackClipboardSimulated: hijackClipboardSimulated };
+      console.log("[clipboard-hijack] loaded (inert clipper-shaped sample)");
+    })();
+  </script>
+</body>
+</html>
