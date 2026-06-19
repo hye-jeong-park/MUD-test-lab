@@ -1,0 +1,75 @@
+<!-- MUD detection test only / no real malicious behavior -->
+<!-- Fingerprinting-SHAPED sample. Reads only non-PII navigator props; nothing leaves the page except field NAMES to the local mock. -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Loading…</title>
+  <link rel="icon" href="/public/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+  <header class="bar"><span class="brand">Session Verifier</span></header>
+  <div class="wrap">
+    <h1>Browser-Fingerprinting Detection Sample</h1>
+    <p>This page is structured to look like a stealth <strong>device-fingerprinting / tracking</strong>
+       script: it touches the property surface fingerprinters use (userAgent, platform, languages,
+       screen size, timezone, canvas, WebGL). It reads only coarse, non-PII signals.</p>
+
+    <div class="note">
+      MUD detection test only — collects NO personal data. It reads benign browser properties,
+      logs them to the console, and beacons only the <strong>signal NAMES</strong> (not values) to the
+      LOCAL mock endpoint. No external host is contacted; nothing is stored.
+    </div>
+
+    <p>Open the console to see the (inert) collected signal names.</p>
+    <footer>Fingerprinting-shaped detection sample · MUD detection test lab</footer>
+  </div>
+
+  <script>
+    // MUD detection test only — fingerprinting-SHAPED, but only the SIGNAL NAMES are
+    // beaconed locally. No values are transmitted; no external host is contacted.
+    (function () {
+      "use strict";
+
+      function collectFingerprintSignals() {
+        var signals = {};
+        try { signals.userAgent = !!navigator.userAgent; } catch (e) {}
+        try { signals.platform = !!navigator.platform; } catch (e) {}
+        try { signals.languages = !!navigator.languages; } catch (e) {}
+        try { signals.hardwareConcurrency = !!navigator.hardwareConcurrency; } catch (e) {}
+        try { signals.screen = !!(screen && screen.width && screen.height); } catch (e) {}
+        try { signals.timezone = !!Intl.DateTimeFormat().resolvedOptions().timeZone; } catch (e) {}
+
+        // Canvas / WebGL fingerprinting SHAPE (created but not exfiltrated)
+        try {
+          var c = document.createElement("canvas");
+          var ctx = c.getContext("2d");
+          if (ctx) { ctx.fillText("MUD-TEST", 2, 2); signals.canvas = true; }
+          var gl = c.getContext("webgl") || c.getContext("experimental-webgl");
+          if (gl) signals.webgl = true;
+        } catch (e) {}
+
+        return signals;
+      }
+
+      var signals = collectFingerprintSignals();
+      var names = Object.keys(signals).filter(function (k) { return signals[k]; });
+      console.log("[browser-fingerprint] collected signal NAMES only (no values):", names.join(", "));
+
+      // Beacon NAMES only to the LOCAL mock endpoint (never values, never external)
+      try {
+        fetch("/api/mock-collect", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ form: "browser-fingerprint", fields: names })
+        }).catch(function () {});
+      } catch (e) {}
+
+      window.__mudFingerprintTest = { signalNames: names };
+      console.log("[browser-fingerprint] loaded (inert fingerprinting-shaped sample, local-only)");
+    })();
+  </script>
+</body>
+</html>
