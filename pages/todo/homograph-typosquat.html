@@ -1,0 +1,50 @@
+<!-- MUD detection test only / no real malicious behavior -->
+<!-- Homograph / typosquat lookalike-domain phishing display. All links point to non-routable example.invalid. -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cloud Mail — Confirm your sign-in</title>
+  <link rel="icon" href="/public/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+  <header class="bar"><span class="brand">☁ Cloud Mail</span></header>
+  <div class="wrap">
+    <h1>Confirm your sign-in</h1>
+    <p>This page mimics a <strong>homograph / typosquatting</strong> lure: lookalike domains using
+       digit/letter swaps and a Unicode-homoglyph variant that visually resemble a fictional
+       trusted brand. The displayed "address bar" and links are the detection target.</p>
+
+    <div class="note">
+      MUD detection test only — fictional brand. Every link points to the non-routable
+      <code>example.invalid</code> domain; no real lookalike domain is registered or reachable.
+    </div>
+
+    <h2>Continue at one of our verified domains:</h2>
+    <ul>
+      <li><a href="https://cloudmail.example.invalid/login">cloudmail.example.invalid</a> (legit-shaped baseline)</li>
+      <li><a href="https://cl0udmail.example.invalid/login">cl0udmail.example.invalid</a> — digit-zero swap (typosquat)</li>
+      <li><a href="https://cloudmai1.example.invalid/login">cloudmai1.example.invalid</a> — "l"→"1" swap</li>
+      <li><a href="https://xn--cloudmil-9db.example.invalid/login">сloudmail.example.invalid</a> — Cyrillic "с" homoglyph (IDN/punycode)</li>
+      <li><a href="https://cloud-mail-secure.example.invalid/login">cloud-mail-secure.example.invalid</a> — added-keyword lookalike</li>
+    </ul>
+
+    <p class="note">Fake address bar (display only): <code>https://сloudmail.example.invalid/account/verify</code></p>
+
+    <footer>Homograph / typosquat detection sample · MUD detection test lab</footer>
+  </div>
+
+  <script>
+    // MUD detection test only — surfaces lookalike-domain strings for detection. Inert.
+    var lookalikes = [
+      "cl0udmail.example.invalid",     // digit-zero
+      "cloudmai1.example.invalid",     // l -> 1
+      "xn--cloudmil-9db.example.invalid", // punycode/IDN homoglyph
+      "cloud-mail-secure.example.invalid"  // keyword padding
+    ];
+    console.log("[homograph-typosquat] lookalike domains (display only, all non-routable):", lookalikes.join(", "));
+  </script>
+</body>
+</html>
