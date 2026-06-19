@@ -1,0 +1,43 @@
+<!-- MUD detection test only / no real malicious behavior -->
+<!-- Scareware / fake virus alert. Phone number is an obviously-fake 555 number. No dialing, no transfer. -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>⚠ SECURITY ALERT — Your device may be infected</title>
+  <link rel="icon" href="/public/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+  <header class="bar"><span class="brand">🛡 Windows Defender Alert</span></header>
+  <div class="wrap">
+    <h1>** YOUR COMPUTER HAS BEEN BLOCKED **</h1>
+    <p>Threats detected: <strong>Trojan.Spyware.Gen</strong>, <strong>Worm.Win32</strong>. Do NOT
+       restart or close this window — doing so may damage your files. Call our certified
+       support technicians immediately to remove the infection.</p>
+
+    <div class="note">MUD detection test only — scareware pattern. There is no real infection, no real support line, no dialing, and no data transfer. The phone number is a reserved fake (555).</div>
+
+    <h2>Microsoft Support (Toll-Free)</h2>
+    <p style="font-size:1.4rem"><strong>📞 +1 (555) 010-7777</strong></p>
+    <p>Error code: <code>#0x80070424-DT00X</code> · Reference ID: <code>MUD-TEST-SCAREWARE</code></p>
+
+    <button type="button" id="alarmBtn">Acknowledge alert</button>
+
+    <footer>Tech-support-scam / scareware detection sample · MUD detection test lab</footer>
+  </div>
+
+  <script>
+    // MUD detection test only — scareware UX patterns (alert spam, fake threat
+    // names, blocked-page wording). Fully inert: no dialer, no beforeunload trap.
+    const fakeThreats = ["Trojan.Spyware.Gen", "Worm.Win32", "Keylogger.Agent"];
+    console.log("[tech-support-scam] scareware sample loaded (inert):", fakeThreats.join(", "));
+
+    document.getElementById("alarmBtn").addEventListener("click", function () {
+      console.log("[tech-support-scam] acknowledge clicked (no action taken)");
+      alert("MUD detection test only — no real threat, no real support, nothing dialed.");
+    });
+  </script>
+</body>
+</html>
